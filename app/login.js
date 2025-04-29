@@ -1,20 +1,36 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, BackHandler } from 'react-native';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons'; // untuk eye icon
-
+import { Ionicons } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
 
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // untuk toggle password
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
-    const trimmedUsername = username.trim(); // menghilangkan spasi di awal/akhir
+  useEffect(() => {
+    const backAction = () => {
+      BackHandler.exitApp(); // Keluar aplikasi saat tekan back di login
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleLogin = async () => {
+    const trimmedUsername = username.trim();
     if ((trimmedUsername === 'admin' || trimmedUsername === 'spv') && password === '1234') {
-      router.push('/page/dashboard');
+      // Simpan session
+      await SecureStore.setItemAsync('userToken', 'authenticated');
+      router.replace('/page/dashboard'); // Gunakan replace bukan push
     } else {
       alert('Username atau Password salah!');
     }
@@ -55,6 +71,7 @@ export default function LoginScreen() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

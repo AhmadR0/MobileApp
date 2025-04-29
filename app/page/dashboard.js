@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet,BackHandler  } from 'react-nat
 import { useRouter } from 'expo-router';
 import { useState,useEffect  } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
 
 // Import komponen scanning
 import ScanTabungMasuk from '../component/scan/scanTabungmasuk';
@@ -15,18 +16,27 @@ export default function DashboardScreen() {
 
   useEffect(() => {
     const backAction = () => {
-      // Mencegah kembali ke halaman login
-      return true;
+      return true; // Mencegah back ke login
     };
-
+  
     const backHandler = BackHandler.addEventListener(
-        'hardwareBackPress',
-        backAction
-      );
-
-      return () => backHandler.remove();
-    }, []);
-
+      'hardwareBackPress',
+      backAction
+    );
+  
+    return () => backHandler.remove();
+  }, []);
+  
+  // Tambahkan juga useEffect untuk check session
+  useEffect(() => {
+    const checkAuth = async () => {
+      const userToken = await SecureStore.getItemAsync('userToken');
+      if (!userToken) {
+        router.replace('/login');
+      }
+    };
+    checkAuth();
+  }, []);
 
 
 
@@ -43,8 +53,9 @@ export default function DashboardScreen() {
     }
   };
 
-  const handleLogout = () => {
-    router.replace('/login');
+  const handleLogout = async () => {
+    await SecureStore.deleteItemAsync('userToken');
+    router.replace('/login'); // Gunakan replace bukan push
   };
 
   return (
@@ -75,15 +86,27 @@ export default function DashboardScreen() {
       {/* TAB SELECTOR */}
       <View style={styles.tabContainer}>
         <TouchableOpacity onPress={() => setActiveTab('masuk')}>
-          <Text style={[styles.tab, activeTab === 'masuk' && styles.activeTab]}>Barang Masuk</Text>
+          <Text style={[
+            styles.tab, 
+            activeTab === 'masuk' && styles.activeTab,
+            activeTab === 'masuk' && styles.activeTabMasuk
+          ]}>Barang Masuk</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => setActiveTab('keluar')}>
-          <Text style={[styles.tab, activeTab === 'keluar' && styles.activeTab]}>Barang Keluar</Text>
+          <Text style={[
+            styles.tab,
+            activeTab === 'keluar' && styles.activeTab,
+            activeTab === 'keluar' && styles.activeTabKeluar
+          ]}>Barang Keluar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => setActiveTab('tambah')}>
-          <Text style={[styles.tab, activeTab === 'tambah' && styles.activeTab]}>Tambah Barang</Text>
+          <Text style={[
+            styles.tab,
+            activeTab === 'tambah' && styles.activeTab,
+            activeTab === 'tambah' && styles.activeTabTambah
+          ]}>Tambah Barang</Text>
         </TouchableOpacity>
       </View>
 
@@ -94,13 +117,9 @@ export default function DashboardScreen() {
 
     </View>
     
-    
   );
-
-  
   
 }
-
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f8' },
@@ -108,11 +127,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#007bff',
     paddingVertical: 2,
     alignItems: 'center',
-  }, manualHeaderText: {
+  },
+  manualHeaderText: {
     color: 'white',
     fontSize: 15,
     fontWeight: 'bold',
-  },header: {
+  },
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: 12,
@@ -136,8 +157,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
   },
-  tabContainer: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 10 },
-  tab: { padding: 10, color: '#555' },
-  activeTab: { color: '#007bff', borderBottomWidth: 2, borderBottomColor: '#007bff' },
+  tabContainer: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    marginVertical: 10,
+    backgroundColor: '#fff',
+    paddingVertical: 5,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  tab: { 
+    padding: 10, 
+    color: '#555',
+    fontWeight: '500',
+  },
+  activeTab: { 
+    fontWeight: 'bold',
+    borderBottomWidth: 3,
+    borderRadius: 2,
+  },
+  // Warna khusus untuk masing-masing tab
+  activeTabMasuk: {
+    borderBottomColor: '#4CAF50', // Hijau
+    color: '#4CAF50',
+  },
+  activeTabKeluar: {
+    borderBottomColor: '#F44336', // Merah
+    color: '#F44336',
+  },
+  activeTabTambah: {
+    borderBottomColor: '#FF9800', // Orange
+    color: '#FF9800',
+  },
   scanArea: { flex: 1 },
 });
