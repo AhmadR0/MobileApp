@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,BackHandler  } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useState,useEffect  } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
 // Import komponen scanning
@@ -12,6 +12,23 @@ import ScanTambahTabung from '../component/scan/scanTambahTabung';
 export default function DashboardScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('masuk');
+
+  useEffect(() => {
+    const backAction = () => {
+      // Mencegah kembali ke halaman login
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction
+      );
+
+      return () => backHandler.remove();
+    }, []);
+
+
+
 
   const renderScanner = () => {
     switch (activeTab) {

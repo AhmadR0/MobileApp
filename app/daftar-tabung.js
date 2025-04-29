@@ -10,3 +10,17 @@ export default function DaftartabungScreen(){
       
   )
 }
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 12,
+    backgroundColor: '#007bff',
+  },
+  hederText:{
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'bold',
+  }
+})
