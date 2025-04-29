@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import { Camera } from 'expo-camera'; // Pastikan impor Camera benar
+import { CameraView } from 'expo-camera'; // Pastikan impor Camera benar
 import { useCameraPermissions } from 'expo-camera'; 
 
 export default function ScanTabungKeluar() {
@@ -36,7 +36,7 @@ export default function ScanTabungKeluar() {
   return (
     <View style={styles.container}>
       {/* Camera view */}
-      <Camera
+      <CameraView
         style={styles.camera}
         onBarCodeScanned={scanned ? undefined : handleBarcodeScanned}
         barCodeScannerSettings={{

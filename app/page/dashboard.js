@@ -5,7 +5,7 @@ import { useState } from 'react';
 // Import komponen scanning
 import ScanTabungMasuk from '../component/scan/scanTabungmasuk';
 import ScanTabungKeluar from '../component/scan/scanTabungKeluar';
-import ScanTambahTabung from '../component/scan/scanTambahbarang';
+import ScanTambahTabung from '../component/scan/scanTambahTabung';
 
 export default function DashboardScreen() {
   const router = useRouter();
