@@ -1,23 +1,23 @@
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons'; // untuk eye icon
+
+
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // untuk toggle password
   const router = useRouter();
 
   const handleLogin = () => {
-    // di sini nanti kamu bisa tambahkan validasi atau autentikasi
-    if (username === 'admin' && password === '1234') {
+    const trimmedUsername = username.trim(); // menghilangkan spasi di awal/akhir
+    if ((trimmedUsername === 'admin' || trimmedUsername === 'spv') && password === '1234') {
       router.push('/page/dashboard');
-    } else if(username === 'spv' && password === '1234'){
-      router.push('/page/dashboard')
-    }
-     else {
+    } else {
       alert('Username atau Password salah!');
     }
-    
   };
 
   return (
@@ -29,17 +29,29 @@ export default function LoginScreen() {
         placeholder="Username"
         value={username}
         onChangeText={setUsername}
+        autoCapitalize="none"
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Password"
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <Ionicons
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={24}
+            color="gray"
+          />
+        </TouchableOpacity>
+      </View>
 
-      <Button title="Login" onPress={handleLogin} />
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -65,5 +77,29 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20,
     backgroundColor: '#fff',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginBottom: 20,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingVertical: 12,
+  },
+  loginButton: {
+    backgroundColor: '#0066cc',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  loginText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });

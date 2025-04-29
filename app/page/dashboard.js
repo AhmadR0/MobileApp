@@ -1,11 +1,13 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
 // Import komponen scanning
 import ScanTabungMasuk from '../component/scan/scanTabungmasuk';
 import ScanTabungKeluar from '../component/scan/scanTabungKeluar';
 import ScanTambahTabung from '../component/scan/scanTambahTabung';
+
 
 export default function DashboardScreen() {
   const router = useRouter();
@@ -31,19 +33,26 @@ export default function DashboardScreen() {
   return (
     <View style={styles.container}>
 
+      <View style={styles.manualHeader}>
+        <Text style={styles.manualHeaderText}>Home</Text>
+      </View>
+
       {/* HEADER */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('/daftar-tabung')}>
-          <Text style={styles.headerButton}>Daftar Tabung</Text>
+        <TouchableOpacity style={styles.headerButton} onPress={() => router.push('/daftar-tabung')}>
+          <Ionicons name="list" size={20} color="white" style={styles.headerIcon} />
+          <Text style={styles.headerText}>Daftar Tabung</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push('/download-laporan')}>
-          <Text style={styles.headerButton}>Download Laporan</Text>
+        <TouchableOpacity style={styles.headerButton} onPress={() => router.push('/download-laporan')}>
+          <Ionicons name="download" size={20} color="white" style={styles.headerIcon} />
+          <Text style={styles.headerText}>Download Laporan</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleLogout}>
-          <Text style={styles.headerButton}>Logout</Text>
+        <TouchableOpacity style={styles.logoutIconWrapper} onPress={handleLogout}>
+          <Ionicons name="log-out-outline" size={28} color="red" />
         </TouchableOpacity>
+
       </View>
 
       {/* TAB SELECTOR */}
@@ -67,13 +76,49 @@ export default function DashboardScreen() {
       </View>
 
     </View>
+    
+    
   );
+
+  
+  
 }
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f4f8' },
-  header: { flexDirection: 'row', justifyContent: 'space-around', padding: 10, backgroundColor: '#007bff' },
-  headerButton: { color: 'white', fontWeight: 'bold' },
+  manualHeader: {
+    backgroundColor: '#007bff',
+    paddingVertical: 2,
+    alignItems: 'center',
+  }, manualHeaderText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },header: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 12,
+    backgroundColor: '#007bff',
+  },
+  headerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+  },
+  headerIcon: {
+    marginRight: 6,
+  },
+  headerText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  logoutIconWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
   tabContainer: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 10 },
   tab: { padding: 10, color: '#555' },
   activeTab: { color: '#007bff', borderBottomWidth: 2, borderBottomColor: '#007bff' },

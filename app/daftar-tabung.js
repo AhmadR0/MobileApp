@@ -1,9 +1,12 @@
-import { View,Text } from "react-native";
+import { View,Text,StyleSheet } from "react-native";
 
 export default function DaftartabungScreen(){
     return(
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Halaman daftar tabung</Text>
+      <View style={styles.container}> 
+          <View style={styles.header}> 
+            <Text style={styles.hederText}>Daftar Tabung</Text>
+          </View>
       </View>
-    )
+      
+  )
 }
