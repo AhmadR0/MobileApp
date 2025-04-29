@@ -56,7 +56,7 @@ export default function DashboardScreen() {
 
       {/* HEADER */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.headerButton} onPress={() => router.push('/daftar-tabung')}>
+        <TouchableOpacity style={styles.headerButton} onPress={() => router.push('/page/daftar-tabung')}>
           <Ionicons name="list" size={20} color="white" style={styles.headerIcon} />
           <Text style={styles.headerText}>Daftar Tabung</Text>
         </TouchableOpacity>
